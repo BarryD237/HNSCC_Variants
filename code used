@@ -1,0 +1,14 @@
+Reference Genome
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/
+File - chromFa.tar.gz
+
+rm *hap* *random* (alternate assemblies for certain regions,
+contigs of unknown position). 
+cat *.fa > hg19.fa
+
+############
+##Indexing##
+############
+samtools faidx hg19.fa
+bwa index -a bwtsw hg19.fa
+java -Xmx4g -Xms4g -jar /home/pilib/picard-2.8.2.jar CreateSequenceDictionary REFERENCE=ref.fa OUTPUT=ref.dict
