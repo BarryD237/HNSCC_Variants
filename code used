@@ -1,4 +1,5 @@
-Reference Genome
+>Reference Genome
+
 http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/
 File - chromFa.tar.gz
 
@@ -6,9 +7,54 @@ rm *hap* *random* (alternate assemblies for certain regions,
 contigs of unknown position). 
 cat *.fa > hg19.fa
 
-############
-##Indexing##
-############
+
+>Indexing
+
 samtools faidx hg19.fa
 bwa index -a bwtsw hg19.fa
 java -Xmx4g -Xms4g -jar /home/pilib/picard-2.8.2.jar CreateSequenceDictionary REFERENCE=ref.fa OUTPUT=ref.dict
+
+>Subsampling
+!!(git clone does not work on cluster. Fix GLIB issue)
+
+sample -s1000 30,000,000 for each sample except 
+AHOLE (_b_ annotation) reads which are 1.4, 1.3 GBs.
+awk '{s++}END{print s/4}' file.fastq
+>> no. reads in file
+
+HN72_S1,2,3_b_ files averaged 4.7M reads. for these files
+I set the code to:
+
+sample -s1000 3,000,000
+
+two folders to work with going forward, 
+full (raw) reads.
+subsample.
+
+>Trimmomatic
+to run in a loop, make tab file with HN51_S1_R1.fastq "\t" HN51_S1_R2.fastq
+listing all files.
+use this bash script:
+(doesnt work as \ has to be one liner in script)
+
+while read x y; do
+
+                base=${x:0:7}
+                baseR1=$(basename $x .fastq)
+                baseR2=$(basename $y .fastq)
+
+                #echo "$baseR1" "$baseR2" "$base"
+
+                java -Xms4g -Xmx4g -jar ../packages/trimmomatic-0.36.jar \
+                PE -threads 8 -phred 33 -trimlog "${base}.log \
+                $x $y \
+                "${baseR1}"_pair.fastq \
+                "${baseR1}"_unpair.fastq \
+                "${baseR2}"_pair.fastq \
+                "${baseR2}"_unpair.fastq \
+                TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:50
+
+done < sample_list.txt
+
+produced outfiles. 
+
