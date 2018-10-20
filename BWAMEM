@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Your job name
+#$ -N bwamem_subs
+
+# The job should be placed into the queue 'all.q'
+#$ -q all.q
+
+# Running in the current directory
+#$ -cwd
+
+# Export some necessary environment variables
+#$ -v PATH
+#$ -v LD_LIBRARY_PATH
+#$ -v PYTHONPATH
+#$ -S /bin/bash
+
+genome=../../genome/hg19.fa
+
+#HN51
+
+bwa mem -R "@RG\tID:I11\tPL:Illumina\tLB:SAMPLE\tSM:HN51_T" $genome -t 8 -M HN51_S1_R1_sample_pair.fastq HN51_S1_R2_sample_pair.fastq | samtools view -Sb -> HN51_T.bam                    
+
+bwa mem -R "@RG\tID:I12\tPL:Illumina\tLB:SAMPLE\tSM:HN51_N" $genome -t 8 -M HN51_S2_R1_sample_pair.fastq HN51_S2_R2_sample_pair.fastq | samtools view -Sb -> HN51_N.bam
+
+bwa mem -R "@RG\tID:I13\tPL:Illumina\tLB:SAMPLE\tSM:HN51_R" $genome -t 8 -M HN51_S3_R1_sample_pair.fastq HN51_S3_R2_sample_pair.fastq | samtools view -Sb -> HN51_R.bam
+
+#HN60
+
+bwa mem -R "@RG\tID:I14\tPL:Illumina\tLB:SAMPLE\tSM:HN60_T" $genome -t 8 -M HN60_S1_R1_sample_pair.fastq HN60_S1_R2_sample_pair.fastq | samtools view -Sb -> HN60_T.bam
+
+bwa mem -R "@RG\tID:I16\tPL:Illumina\tLB:SAMPLE\tSM:HN60_N" $genome -t 8 -M HN60_S2_R1_sample_pair.fastq HN60_S2_R2_sample_pair.fastq | samtools view -Sb -> HN60_N.bam
+
+bwa mem -R "@RG\tID:I18\tPL:Illumina\tLB:SAMPLE\tSM:HN60_R" $genome -t 8 -M HN60_S3_R1_sample_pair.fastq HN60_S3_R2_sample_pair.fastq | samtools view -Sb -> HN60_R.bam
+
+#HN72
+
+bwa mem -R "@RG\tID:I17\tPL:Illumina\tLB:SAMPLE\tSM:HN72_T" $genome -t 8 -M HN72_S1_a_R1_sample_pair.fastq HN72_S1_a_R2_sample_pair.fastq | samtools view -Sb -> HN72_T_a.bam
+
+bwa mem -R "@RG\tID:I19\tPL:Illumina\tLB:SAMPLE\tSM:HN72_T" $genome -t 8 -M HN72_S1_b_R1_sample_pair.fastq HN72_S1_b_R2_sample_pair.fastq | samtools view -Sb -> HN72_T_b.bam
+
+
+bwa mem -R "@RG\tID:I20\tPL:Illumina\tLB:SAMPLE\tSM:HN72_N" $genome -t 8 -M HN72_S2_a_R1_sample_pair.fastq HN72_S2_a_R2_sample_pair.fastq | samtools view -Sb -> HN72_N_a.bam
+
+bwa mem -R "@RG\tID:I21\tPL:Illumina\tLB:SAMPLE\tSM:HN72_N" $genome -t 8 -M HN72_S2_b_R1_sample_pair.fastq HN72_S2_b_R2_sample_pair.fastq | samtools view -Sb -> HN72_N_b.bam
+
+
+bwa mem -R "@RG\tID:I22\tPL:Illumina\tLB:SAMPLE\tSM:HN72_R" $genome -t 8 -M HN72_S3_a_R1_sample_pair.fastq HN72_S3_a_R2_sample_pair.fastq | samtools view -Sb -> HN72_R_a.bam
+
+bwa mem -R "@RG\tID:I23\tPL:Illumina\tLB:SAMPLE\tSM:HN72_R" $genome -t 8 -M HN72_S3_b_R1_sample_pair.fastq HN72_S3_b_R2_sample_pair.fastq | samtools view -Sb -> HN72_R_b.bam
