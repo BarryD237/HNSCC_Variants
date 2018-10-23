@@ -58,3 +58,58 @@ done < sample_list.txt
 
 produced outfiles. 
 
+
+!!ERROR!! 
+tried to complete per man, BWA => BAM => Fixmate => sort
+gave error trying to run markduplicates.
+
+I ran both samtools and picard
+#1 -- BAM => PICARDsort => Fixmate => MarkDuplicates
+#2 -- BAM => SAMTOOLSsort => Fixmate => MarkDuplicates
+
+##########
+# PICARD #
+##########
+
+picard=/home/pilib/picard-2.8.2.jar
+
+#for b in *.bam; do
+
+#	base=$(basename $b .bam)
+
+#	java -Xms10g -Xmx20g -Djava.io.tmpdir=tmp -jar $picard SortSam INPUT=$b OUTPUT="${base}"_sort.bam SORT_ORDER=coordinate
+
+#done
+
+echo "sorting done, fixmate starting"
+
+for x in *_sort.bam; do
+
+        base1=$(basename $x _sort.bam)
+        echo "$base1"
+        samtools fixmate $x "${base1}"_fix.bam
+
+done
+
+############
+# SAMTOOLS #
+############
+
+
+
+for b in *.bam; do
+
+        base=$(basename $b .bam)
+
+        samtools sort $b "${base}"_sort
+
+done
+
+echo "sorting done, starting fixmates"
+
+for x in *_sort.bam; do
+
+        base1=$(basename $x _sort.bam)
+
+        samtools fixmate $x "${base1}"_fix.bam
+done
