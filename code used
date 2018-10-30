@@ -113,3 +113,30 @@ for x in *_sort.bam; do
 
         samtools fixmate $x "${base1}"_fix.bam
 done
+
+
+#################
+# capture target#
+#################
+
+to get the hg19 chromosome sizes: 
+
+mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e \
+	"select chrom, size from hg19.chromInfo"  > hg19.genome
+  
+  
+bedtools sort -i SeqCap_EZ_Exome_v3_hg19_capture_targets.bed \
+| bedtools slop -i - -b 100 -g hg19_size.txt | bedtools merge -i - > Design_capture_PADDED.bed
+
+!!use the Design_capture_PADDED.bed file going forward!! 
+
+!!!!! piping tip !!!!
+-i - ...
+
+the dash after -i tells bedtools to expect piped input. 
+
+
+Determine Sum Total Size of Regions in a BED File
+(only chr1-22 X, Y, M included in hg19_size.txt)
+[nextgen2015@node015 PICARD]$ bedtools genomecov -i Design_capture_PADDED.bed -g hg19_size.txt -max 1 | grep -P "genome\t1" | cut -f 3
+112504429
