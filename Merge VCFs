@@ -2,3 +2,19 @@ first alternative, use one vcf file to get the header, and the concatenante all 
 
 grep '^#' chr1.vcf > merge.vcf
 grep -v '^#' chr1.vcf  chr2.vcf chr3.vcf chr4.vcf   >> merge.vcf
+
+EDIT
+
+this literally dumps chr1, chr2 into the chrom column.
+in my case it was filled with filenames such as HN51_Tumor.flt.vcf:chr1.
+
+So I had to place the header of one file first ..
+
+grep '^#' HN51_Tumor.flt.vcf > Tumor.vcf
+
+Then add (one by one) the contents below the header to the file. 
+
+grep -v '^#' HN51_Tumor.flt.vcf >> Tumor.vcf
+grep -v '^#' HN60_Tumor.flt.vcf >> Tumor.vcf
+grep -v '^#' HN72_Tumor.flt.vcf >> Tumor.vcf
+
