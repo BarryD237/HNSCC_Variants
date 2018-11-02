@@ -1,0 +1,4 @@
+first alternative, use one vcf file to get the header, and the concatenante all the other vcf without the header (this was your error)
+
+grep '^#' chr1.vcf > merge.vcf
+grep -v '^#' chr1.vcf  chr2.vcf chr3.vcf chr4.vcf   >> merge.vcf
